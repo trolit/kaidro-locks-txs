@@ -57,7 +57,7 @@
         </transactions-summary>
       </el-col>
 
-      <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
+      <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
         <synergy-summary :is-loading="isLoading" :data="matchedTransactions" />
       </el-col>
     </el-row>
