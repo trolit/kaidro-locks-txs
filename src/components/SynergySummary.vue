@@ -7,7 +7,10 @@
       >
     </template>
 
+    <em v-if="!data.length">No data</em>
+
     <el-row
+      v-else
       :gutter="20"
       v-for="(
         { from, to, label, transactions }, synergyWeekIndex
