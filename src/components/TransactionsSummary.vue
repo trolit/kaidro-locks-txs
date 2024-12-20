@@ -14,9 +14,14 @@
       >
         {{ convertBlocktime(item.blockTime) }}
 
-        <transaction-href :transaction-hash="item.transactionHash" text="txs" />
+        <div :style="{ display: 'flex', gap: '10px' }">
+          {{ item.value }} {{ item.tokenSymbol }}
 
-        {{ item.value }} {{ item.tokenSymbol }}
+          <transaction-href
+            :transaction-hash="item.transactionHash"
+            text="txs"
+          />
+        </div>
       </div>
     </div>
 
