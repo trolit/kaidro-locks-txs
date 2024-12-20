@@ -20,15 +20,18 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="20">
-      <el-col :span="8">
-        <transactions-summary :data="matchedAkdrTransactionsData">
+    <el-row :gutter="18">
+      <el-col :span="5">
+        <transactions-summary
+          :is-loading="isLoading"
+          :data="matchedAkdrTransactionsData"
+        >
           <template #header>
             A-KDR locks transactions<br />
             <el-link
               href="https://app.roninchain.com/token/0xe3c587e40e9b89b3f2af526c9d468d49a66e3c2d?p=1&ps=25"
               target="_blank"
-              type="warning"
+              type="primary"
             >
               token
             </el-link>
@@ -36,21 +39,33 @@
         </transactions-summary>
       </el-col>
 
-      <el-col :span="8">
-        <transactions-summary :data="matchedRonTransactionsData">
+      <el-col :span="5">
+        <transactions-summary
+          :is-loading="isLoading"
+          :data="matchedRonTransactionsData"
+        >
           <template #header>
             RON locks transactions<br />
             <el-link
               href="https://app.roninchain.com/address/0xfd7ee5e1dfa1990c3cc6742eaae4bcf1ff6b516e?p=1&ps=25"
               target="_blank"
-              type="warning"
+              type="primary"
             >
               Kaidro Synergy Payments
             </el-link>
           </template>
         </transactions-summary>
       </el-col>
+
+      <el-col :span="8">
+        <synergy-summary :is-loading="isLoading" :data="matchedTransactions" />
+      </el-col>
     </el-row>
+
+    <footer>
+      This tool is not associated with Kaidro team. You should not treat is as
+      final evidence when discussing A-KDR conversion rate
+    </footer>
   </el-container>
 </template>
 
@@ -59,6 +74,7 @@ import { debug } from "./helpers/debug";
 import { sleep } from "@/helpers/sleep";
 import myJsonData from "@/assets/01072024.json";
 import { decodeAkdrValue } from "./helpers/decodeAkdrValue";
+import SynergySummary from "./components/SynergySummary.vue";
 import { ITransactionSummary } from "./types/ITransactionSummary";
 import { useHttpServiceStore } from "@/store/useHttpServiceStore";
 import TransactionsSummary from "./components/TransactionsSummary.vue";
@@ -71,6 +87,7 @@ import {
 
 export default {
   components: {
+    SynergySummary,
     TransactionsSummary,
   },
 

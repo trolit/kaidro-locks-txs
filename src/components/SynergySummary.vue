@@ -7,45 +7,49 @@
       >
     </template>
 
-    <em v-if="!data.length">No data</em>
+    <em v-if="isLoading">Loading...</em>
 
-    <el-row
-      v-else
-      :gutter="20"
-      v-for="(
-        { from, to, label, transactions }, synergyWeekIndex
-      ) in summaryData"
-      :key="synergyWeekIndex"
-    >
-      <el-col :span="10">
-        <small>
-          <el-text size="small" type="warning">
-            Week {{ synergyWeekIndex + 1 }}
+    <em v-else-if="!data.length">No data</em>
+
+    <el-scrollbar v-else height="400px">
+      <el-row
+        :gutter="20"
+        v-for="(
+          { from, to, label, transactions }, synergyWeekIndex
+        ) in summaryData"
+        :key="synergyWeekIndex"
+        :style="{ padding: 0, margin: 0 }"
+      >
+        <el-col :span="10">
+          <small>
+            <el-text size="small" type="warning">
+              Week {{ synergyWeekIndex + 1 }}
+            </el-text>
+            <br />
+            {{ from }} GMT <br />
+            {{ to }} GMT
+          </small>
+        </el-col>
+
+        <el-col :span="10">
+          <el-text
+            v-if="transactions.length"
+            size="small"
+            v-for="(transaction, tranasctionIndex) in transactions"
+            :key="tranasctionIndex"
+          >
+            <transaction-href
+              :transaction-hash="transaction.transactionHash"
+              :text="`txs${tranasctionIndex + 1}&nbsp;`"
+            />
           </el-text>
-          <br />
-          {{ from }} GMT <br />
-          {{ to }} GMT
-        </small>
-      </el-col>
 
-      <el-col :span="10">
-        <el-text
-          v-if="transactions.length"
-          size="small"
-          v-for="(transaction, tranasctionIndex) in transactions"
-          :key="tranasctionIndex"
-        >
-          <transaction-href
-            :transaction-hash="transaction.transactionHash"
-            :text="`txs${tranasctionIndex + 1}&nbsp;`"
-          />
-        </el-text>
+          <el-text v-else>{{ label }}</el-text>
+        </el-col>
 
-        <el-text v-else>{{ label }}</el-text>
-      </el-col>
-
-      <el-divider v-if="!isLastElement(synergyWeekIndex)" />
-    </el-row>
+        <el-divider v-if="!isLastElement(synergyWeekIndex)" />
+      </el-row>
+    </el-scrollbar>
   </el-card>
 </template>
 
@@ -62,6 +66,11 @@ export default {
   },
 
   props: {
+    isLoading: {
+      type: Boolean,
+      required: true,
+    },
+
     data: {
       type: Array as PropType<ITransactionSummary[]>,
       required: true,

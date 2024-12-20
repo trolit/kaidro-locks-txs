@@ -4,7 +4,9 @@
       <slot name="header"> </slot>
     </template>
 
-    <div v-if="data.length">
+    <em v-if="isLoading">Loading...</em>
+
+    <div v-else-if="data.length">
       <div
         v-for="(item, index) in data"
         :key="index"
@@ -12,10 +14,7 @@
       >
         {{ convertBlocktime(item.blockTime) }}
 
-        <transaction-href
-          :transaction-hash="item.transactionHash"
-          text="txs"
-        />,
+        <transaction-href :transaction-hash="item.transactionHash" text="txs" />
 
         {{ item.value }} {{ item.tokenSymbol }}
       </div>
@@ -37,6 +36,11 @@ export default {
   },
 
   props: {
+    isLoading: {
+      type: Boolean,
+      required: true,
+    },
+
     data: {
       type: Array as PropType<ITransactionSummary[]>,
       required: true,
