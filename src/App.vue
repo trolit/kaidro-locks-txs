@@ -21,7 +21,7 @@
     </el-row>
 
     <el-row :gutter="18">
-      <el-col :xs="18" :sm="18" :md="18" :lg="5" :xl="5">
+      <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
         <transactions-summary
           :is-loading="isLoading"
           :data="matchedAkdrTransactionsData"
@@ -39,7 +39,7 @@
         </transactions-summary>
       </el-col>
 
-      <el-col :xs="18" :sm="18" :md="18" :lg="5" :xl="5">
+      <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
         <transactions-summary
           :is-loading="isLoading"
           :data="matchedRonTransactionsData"
@@ -57,7 +57,7 @@
         </transactions-summary>
       </el-col>
 
-      <el-col :xs="18" :sm="18" :md="18" :lg="8" :xl="8">
+      <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
         <synergy-summary :is-loading="isLoading" :data="matchedTransactions" />
       </el-col>
     </el-row>
