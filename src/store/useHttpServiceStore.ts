@@ -32,6 +32,7 @@ export const useHttpServiceStore = defineStore("useHttpServiceStore", () => {
       return items;
     },
 
+    // @DEPRECATED
     async getRonLockTransactions(page = 1) {
       const {
         data: {
