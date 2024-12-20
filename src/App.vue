@@ -121,8 +121,14 @@ export default {
   },
 
   methods: {
+    reset() {
+      this.matchedTransactions = [];
+    },
+
     async onSubmit() {
       this.isLoading = true;
+
+      this.reset();
 
       await this.fetchAkdrTransactions();
 
