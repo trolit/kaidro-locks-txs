@@ -1,14 +1,14 @@
 <template>
   <el-container direction="vertical" class="app">
-    <el-row :gutter="20" class="data">
-      <el-col :span="6">
+    <el-row :gutter="18" class="data">
+      <el-col :xs="18" :sm="18" :md="18" :lg="5" :xl="5">
         <el-input
           v-model="walletAddress"
           placeholder="paste your wallet address, 0x..."
         />
       </el-col>
 
-      <el-col :span="6">
+      <el-col :xs="18" :sm="18" :md="18" :lg="5" :xl="5">
         <el-button
           type="primary"
           @click="onSubmit"
@@ -21,7 +21,7 @@
     </el-row>
 
     <el-row :gutter="18">
-      <el-col :span="5">
+      <el-col :xs="18" :sm="18" :md="18" :lg="5" :xl="5">
         <transactions-summary
           :is-loading="isLoading"
           :data="matchedAkdrTransactionsData"
@@ -39,7 +39,7 @@
         </transactions-summary>
       </el-col>
 
-      <el-col :span="5">
+      <el-col :xs="18" :sm="18" :md="18" :lg="5" :xl="5">
         <transactions-summary
           :is-loading="isLoading"
           :data="matchedRonTransactionsData"
@@ -57,7 +57,7 @@
         </transactions-summary>
       </el-col>
 
-      <el-col :span="8">
+      <el-col :xs="18" :sm="18" :md="18" :lg="8" :xl="8">
         <synergy-summary :is-loading="isLoading" :data="matchedTransactions" />
       </el-col>
     </el-row>
