@@ -12,13 +12,10 @@
       >
         {{ convertBlocktime(item.blockTime) }}
 
-        <el-link
-          :href="getHref(item.transactionHash)"
-          target="_blank"
-          type="primary"
-        >
-          view transaction
-        </el-link>
+        <transaction-href
+          :transaction-hash="item.transactionHash"
+          text="txs"
+        />,
 
         {{ item.value }} {{ item.tokenSymbol }}
       </div>
@@ -30,10 +27,15 @@
 
 <script lang="ts">
 import { PropType } from "vue";
+import TransactionHref from "./TransactionHref.vue";
 import { useDayjsStore } from "@/store/useDayjsStore";
 import { ITransactionSummary } from "@/types/ITransactionSummary";
 
 export default {
+  components: {
+    TransactionHref,
+  },
+
   props: {
     data: {
       type: Array as PropType<ITransactionSummary[]>,
@@ -55,10 +57,6 @@ export default {
   methods: {
     convertBlocktime(blockTime: number) {
       return this.dayjsStore.blockTimeToDate(blockTime);
-    },
-
-    getHref(blockHash: string) {
-      return `${this.TRANSACTION_DETAILS_URL}/${blockHash}`;
     },
   },
 };
