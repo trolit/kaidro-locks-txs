@@ -26,6 +26,10 @@
     </div>
 
     <em v-else>No data</em>
+
+    <template v-if="withFooter" #footer>
+      <slot name="footer"></slot>
+    </template>
   </el-card>
 </template>
 
@@ -48,6 +52,11 @@ export default {
 
     data: {
       type: Array as PropType<ITransactionSummary[]>,
+      required: true,
+    },
+
+    withFooter: {
+      type: Boolean,
       required: true,
     },
   },
