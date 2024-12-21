@@ -3,8 +3,16 @@
     <template #header>
       Your synergy summary<br />
       <el-text type="info" size="small">
-        *based on collected lock purchases</el-text
-      >
+        *based on collected lock purchases
+      </el-text>
+      <br />
+      <div v-if="data.length && !hasParticipatedInAllSynergyWeeks">
+        <el-switch v-model="areNotParticipatedWeeksVisible" />&nbsp;
+
+        <el-text size="small">
+          {{ switchText }} synergy weeks before conducting first synergy
+        </el-text>
+      </div>
     </template>
 
     <em v-if="isLoading">Loading...</em>
@@ -13,6 +21,7 @@
 
     <el-scrollbar v-else height="400px">
       <el-row
+        class="synergy-week"
         :gutter="20"
         v-for="(
           { from, to, label, transactions }, synergyWeekIndex
@@ -20,7 +29,7 @@
         :key="synergyWeekIndex"
         :style="{ padding: 0, margin: 0 }"
       >
-        <el-col :span="10">
+        <el-col :span="10" class="range">
           <small>
             <el-text size="small" type="warning">
               Week {{ synergyWeekIndex + 1 }}
@@ -31,7 +40,7 @@
           </small>
         </el-col>
 
-        <el-col :span="10">
+        <el-col :span="10" class="transactions">
           <el-text
             v-if="transactions.length"
             size="small"
@@ -47,7 +56,7 @@
           <el-text v-else>{{ label }}</el-text>
         </el-col>
 
-        <el-divider v-if="!isLastElement(synergyWeekIndex)" />
+        <div class="space" v-if="!isLastElement(synergyWeekIndex)" />
       </el-row>
     </el-scrollbar>
   </el-card>
@@ -82,10 +91,16 @@ export default {
 
     return {
       dayjsStore,
+      hasParticipatedInAllSynergyWeeks: true,
+      areNotParticipatedWeeksVisible: false,
     };
   },
 
   computed: {
+    switchText() {
+      return this.areNotParticipatedWeeksVisible ? "Hide" : "Show";
+    },
+
     translatedSynergyWeeks() {
       return RAW_SYNERGY_WEEKS.map(({ from, to }) => {
         return {
@@ -101,27 +116,37 @@ export default {
     summaryData() {
       let isFirstSynergy = false;
 
-      return this.translatedSynergyWeeks.map(
-        ({ from, to, fromUnix, toUnix }) => {
-          let label = "N/A";
-          const transactions = this.getTransactions(fromUnix, toUnix);
+      const synergyWeeks: any = [];
 
-          if (transactions.length !== 0) {
-            isFirstSynergy = true;
-          } else if (transactions.length === 0 && isFirstSynergy) {
-            label = "Missed";
-          } else {
-            label = "Not participated";
+      this.translatedSynergyWeeks.map(({ from, to, fromUnix, toUnix }) => {
+        let label = "N/A";
+        const transactions = this.getTransactions(fromUnix, toUnix);
+
+        if (transactions.length !== 0) {
+          isFirstSynergy = true;
+        } else if (transactions.length === 0 && isFirstSynergy) {
+          label = "Missed";
+        } else {
+          label = "Not participated";
+        }
+
+        if (label === "Not participated") {
+          this.hasParticipatedInAllSynergyWeeks = false;
+
+          if (!this.areNotParticipatedWeeksVisible) {
+            return;
           }
+        }
 
-          return {
-            from,
-            to,
-            label,
-            transactions,
-          };
-        },
-      );
+        synergyWeeks.push({
+          from,
+          to,
+          label,
+          transactions,
+        });
+      });
+
+      return synergyWeeks;
     },
   },
 
@@ -136,10 +161,6 @@ export default {
 
     getTransactions(fromUnix: number, toUnix: number) {
       return this.data.filter(transactionSummary => {
-        console.log(
-          `${fromUnix} - ${transactionSummary.blockTime} - ${toUnix}`,
-        );
-
         return (
           transactionSummary.blockTime > fromUnix &&
           transactionSummary.blockTime <= toUnix
