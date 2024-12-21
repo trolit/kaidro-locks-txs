@@ -17,7 +17,7 @@
 .app {
   gap: 20px;
   display: flex;
-  padding: 10px;
+  padding: 5px;
 }
 
 footer {
@@ -29,7 +29,30 @@ footer {
   bottom: 0;
   width: 100%;
   height: 30px;
-  font-size: 10px;
+  font-size: 13px;
   text-align: center;
   background-color: #de283f;
+}
+
+.synergy-week {
+  .range {
+    font-size: 13px;
+  }
+
+  .space {
+    margin: 35px 0;
+  }
+
+  .transactions {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+.vertical-center {
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
