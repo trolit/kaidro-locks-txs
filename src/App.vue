@@ -1,5 +1,22 @@
 <template>
   <el-container direction="vertical" class="app">
+    <small>
+      This tool lists locks purchases made with either RON or A-KDR up to
+      <strong>14 December 2024</strong> (last synergy week before TGE)
+
+      <br />
+      <div class="vertical-center">
+        source code/repository:
+        <el-link
+          href="https://github.com/trolit/kaidro-locks-txs"
+          target="_blank"
+          type="primary"
+        >
+          https://github.com/trolit/kaidro-locks-txs
+        </el-link>
+      </div>
+    </small>
+
     <el-row :gutter="18" class="data">
       <el-col :xs="18" :sm="18" :md="18" :lg="5" :xl="5">
         <el-input
@@ -23,6 +40,7 @@
     <el-row :gutter="18">
       <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
         <transactions-summary
+          with-footer
           :is-loading="isLoading"
           :data="matchedAkdrTransactionsData"
         >
@@ -36,11 +54,19 @@
               token
             </el-link>
           </template>
+
+          <template #footer>
+            <el-text size="small" type="warning">
+              Warning: Skynet REST API used to get A-KDR transactions is set to
+              be deprecated on 31/12/2024!
+            </el-text>
+          </template>
         </transactions-summary>
       </el-col>
 
       <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
         <transactions-summary
+          with-footer
           :is-loading="isLoading"
           :data="matchedRonTransactionsData"
         >
@@ -54,6 +80,13 @@
               Kaidro Synergy Payments
             </el-link>
           </template>
+
+          <template #footer>
+            <el-text size="small" type="info">
+              Considering data between 01/07/2024 and 14/12/2024 (last synergy
+              week before TGE)
+            </el-text>
+          </template>
         </transactions-summary>
       </el-col>
 
@@ -63,8 +96,8 @@
     </el-row>
 
     <footer>
-      This tool is not associated with Kaidro team. You should not treat is as
-      final evidence when discussing A-KDR conversion rate
+      This tool is not associated with Kaidro team. Do not consider output as
+      final evidence in missing A-KDR.
     </footer>
   </el-container>
 </template>
@@ -84,6 +117,7 @@ import {
   LAST_SYNERGY_BEFORE_TGE_TIMESTAMP_IN_SECONDS,
   TRANSACTION_HASH_OF_KAIDRO_REVERTING_SOME_AKDR,
 } from "@/assets/constants";
+import { useDayjsStore } from "./store/useDayjsStore";
 
 export default {
   components: {
@@ -92,9 +126,11 @@ export default {
   },
 
   data() {
+    const dayjsStore = useDayjsStore();
     const httpService = useHttpServiceStore();
 
     return {
+      dayjsStore,
       httpService,
       walletAddress: "",
       isLoading: false,
